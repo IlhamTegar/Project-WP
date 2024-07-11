@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Alternatif;
+use Illuminate\Support\Facades\Auth;
 
 class AlternatifController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         $alternatifs = Alternatif::all();
@@ -15,25 +21,24 @@ class AlternatifController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'nama' => 'required|array',
-            'teknik' => 'required|array',
-            'fisik' => 'required|array',
-            'intelejen' => 'required|array',
-            'mental' => 'required|array',
-            'usia' => 'required|array',
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'teknik' => 'required|integer|min:1|max:10',
+            'fisik' => 'required|integer|min:1|max:10',
+            'intelejen' => 'required|integer|min:1|max:10',
+            'mental' => 'required|integer|min:1|max:10',
+            'usia' => 'required|integer|min:17|max:25',
         ]);
 
-        for ($i = 0; $i < count($data['nama']); $i++) {
-            Alternatif::create([
-                'nama' => $data['nama'][$i],
-                'teknik' => $data['teknik'][$i],
-                'fisik' => $data['fisik'][$i],
-                'intelejen' => $data['intelejen'][$i],
-                'mental' => $data['mental'][$i],
-                'usia' => $data['usia'][$i],
-            ]);
-        }
+        Alternatif::create($request->all());
+
+        return redirect()->route('alternatif');
+    }
+
+    public function destroy($id)
+    {
+        $alternatif = Alternatif::findOrFail($id);
+        $alternatif->delete();
 
         return redirect()->route('alternatif');
     }
@@ -41,6 +46,7 @@ class AlternatifController extends Controller
     public function destroyAll()
     {
         Alternatif::truncate();
+
         return redirect()->route('alternatif');
     }
 }

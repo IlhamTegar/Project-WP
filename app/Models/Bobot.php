@@ -8,12 +8,4 @@ use Illuminate\Database\Eloquent\Model;
 class Bobot extends Model
 {
     use HasFactory;
-
-    protected $fillable = [
-        'teknik',
-        'fisik',
-        'intelejen',
-        'mental',
-        'usia',
-    ];
 }

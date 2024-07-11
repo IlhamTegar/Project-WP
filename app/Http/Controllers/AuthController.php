@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
@@ -46,7 +47,16 @@ class AuthController extends Controller
             'password' => Hash::make($validatedData['password']),
         ]);
 
-        Auth::login($user);
+        $user->sendEmailVerificationNotification();
+
+        return redirect()->route('verification.notice');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect('/');
     }
