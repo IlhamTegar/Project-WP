@@ -56,7 +56,7 @@
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Simpan</button>
-        <a href="{{ route('hasil') }}" class="btn btn-success">Selanjutnya</a>
+        <a href="{{ route('hasil') }}" class="btn btn-success">Selesai</a>
     </form>
 </div>
 @endsection

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,9 +11,11 @@
         .profile-dropdown {
             text-align: center;
             padding: 10px;
-            background-color: #ffc107; /* Warna background sama dengan navbar */
+            background-color: #ffc107;
+            /* Warna background sama dengan navbar */
             border-radius: 5px 5px 0 0;
         }
+
         .profile-photo {
             width: 30px;
             height: 30px;
@@ -20,23 +23,29 @@
             object-fit: cover;
             margin-bottom: 10px;
         }
+
         .profile-name {
             font-weight: bold;
-            color: white; /* Warna teks putih */
+            color: white;
+            /* Warna teks putih */
         }
+
         .dropdown-menu {
             width: 200px;
             padding: 0;
             border-radius: 0 0 5px 5px;
         }
+
         .dropdown-item {
             text-align: center;
             background-color: #ffffff;
             border-radius: 0 0 5px 5px;
         }
+
         .dropdown-divider {
             margin: 0;
         }
+
         .footer {
             background-color: #f8f9fa;
             text-align: center;
@@ -44,29 +53,40 @@
             margin-top: 20px;
             border-top: 1px solid #e7e7e7;
             display: flex;
-            justify-content: space;
+            justify-content: center;
             align-items: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
         }
+
         .footer p {
             margin: 0;
             color: #6c757d;
         }
+
         .footer .social-icons a {
             color: #6c757d;
             margin-left: 10px;
             text-decoration: none;
         }
+
         .footer .social-icons a:hover {
             color: #333;
         }
+
         .navbar-brand img {
-            height: 40px; /* Adjust as needed */
+            height: 40px;
+            /* Adjust as needed */
         }
+
         .navbar-logo {
-            height: 40px; /* Adjust as needed */
+            height: 40px;
+            /* Adjust as needed */
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-warning">
         <a class="navbar-brand" href="/">
@@ -93,39 +113,38 @@
 
             <ul class="navbar-nav ml-auto">
                 @guest
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                </li>
                 @else
-                    <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <li class="nav-item dropdown">
+                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @if (Auth::user()->profile_photo_path)
+                        <img src="{{ asset('storage/' . Auth::user()->profile_photo_path) }}" alt="Profile Photo" class="profile-photo">
+                        @else
+                        {{ Auth::user()->name }}
+                        @endif
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <div class="profile-dropdown">
                             @if (Auth::user()->profile_photo_path)
-                                <img src="{{ asset('storage/' . Auth::user()->profile_photo_path) }}" alt="Profile Photo" class="profile-photo">
-                            @else
-                                {{ Auth::user()->name }}
+                            <img src="{{ asset('storage/' . Auth::user()->profile_photo_path) }}" alt="Profile Photo" class="profile-photo">
                             @endif
+                            <div class="profile-name">{{ Auth::user()->name }}</div>
+                        </div>
+                        <a class="dropdown-item" href="{{ route('profile.edit') }}">Profil</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                         document.getElementById('logout-form').submit();">
+                            Logout
                         </a>
 
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <div class="profile-dropdown">
-                                @if (Auth::user()->profile_photo_path)
-                                    <img src="{{ asset('storage/' . Auth::user()->profile_photo_path) }}" alt="Profile Photo" class="profile-photo">
-                                @endif
-                                <div class="profile-name">{{ Auth::user()->name }}</div>
-                            </div>
-                            <a class="dropdown-item" href="{{ route('profile.edit') }}">Profil</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                               onclick="event.preventDefault();
-                                         document.getElementById('logout-form').submit();">
-                                Logout
-                            </a>
-
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
-                        </div>
-                    </li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </div>
+                </li>
                 @endguest
             </ul>
         </div>
@@ -146,4 +165,5 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     @yield('scripts')
 </body>
+
 </html>
